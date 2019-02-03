@@ -85,3 +85,12 @@
 //			}
 //		}
 //	});
+
+
+
+									target_window.detach();
+									console.log("detach");
+									$("#innerdesktop").append(target_window,function(){
+										target_window.show();
+										console.log("ok , last now");
+									});
