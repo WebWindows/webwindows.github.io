@@ -99,6 +99,8 @@
 .context-menu-item.icon-delete { background-image: url(images/page_white_delete.png); }
 .context-menu-item.icon-add { background-image: url(images/page_white_add.png); }
 .context-menu-item.icon-quit { background-image: url(images/door.png); }
+.context-menu-item.icon-refresh { background-image: url(images/refresh.png); }
+.context-menu-item.icon-warning { background-image: url(images/warning-16x16.png); }
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }

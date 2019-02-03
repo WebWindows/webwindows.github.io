@@ -46,28 +46,27 @@
 	#hide_or_show_the_desktop:hover{
 		background-color: rgba(255,255,255,0.4);
 	}
+	.desktop_window{
+		position: absolute;
+		z-index: 3;
+		display: block;
+	}
+	.window-titlebar > .icon {
+		vertical-align: bottom;
+	}
+	.window-content {
+		margin: 0;
+		padding: 0;
+	}
 </style>
 <link rel="stylesheet" type="text/css" href="css/desktop.css"/>
 <link rel="stylesheet" href="css/desktop_icon.css" />
-<div id="innerdesktop"></div>
+<div id="innerdesktop"> </div>
 <div id="taskbar">
 	<div id="start_div" class="taskbaricon"></div>
 	<div id="program_list">
-		<div class="quick_start_div taskbaricon" style="background-image: url(img/icon/tcp.ico);">
-		</div>
-		<div class="quick_start_div taskbaricon" style="background-image: url(img/Windows_logo.svg);">
-		</div>
 		<div class="program">
-			<img src="img/jui/earth.jpg"/>
-			<span>
-				webwindows - Google Chrome
-			</span>
-		</div>
-		<div class="program">
-			<img src="img/jui/rocket.jpg"/>
-			<span>
-				23232323232323232323232
-			</span>
+			<img src="img/icon/chrome.ico"/> <span>webwindows - Google Chrome</span>
 		</div>
 	</div>
 	<div id="notice_div"></div>
@@ -80,45 +79,71 @@
 <script src="js/jquery.contextMenu.js"></script>
 <script src="js/jquery.ui.position.js"></script>
 <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css"/>
+<link rel="stylesheet" type="text/css" href="css/desktop_window.css"/>
+<script src="js/desktop_icon.js"></script>
+<script src="js/taskbar_icon.js"></script>
 <script>
 	$(function(){
 		$.contextMenu({
 			selector: "#desktop", 
 			callback: function(key, options) {
 				var m = "clicked: " + key;
-				window.console && console.log(m) || alert(m); 
+				console.log(m); 
+				if(key == "refresh"){
+					desktop_refresh();
+				}
+				else if(key == "quanping"){
+					screenfull.toggle($("body").get(0));
+				}
 			},
 			items: {
-	            "edit": {"name": "Edit", "icon": "edit"},
-	            "cut": {"name": "Cut", "icon": "cut"},
-	            "sep1": "---------",
-	            "quit": {"name": "Quit", "icon": "quit"},
-	            "sep2": "---------",
-	            "fold1": {
-	                "name": "Sub group", 
-	                "items": {
-	                    "fold1-key1": {"name": "Foo bar"},
-	                    "fold2": {
-	                        "name": "Sub group 2", 
-	                        "items": {
-	                            "fold2-key1": {"name": "alpha"},
-	                            "fold2-key2": {"name": "bravo"},
-	                            "fold2-key3": {"name": "charlie"}
-	                        }
-	                    },
-	                    "fold1-key3": {"name": "delta"}
-	                }
-	            },
-	            "fold1a": {
-	                "name": "Other group", 
-	                "items": {
-	                    "fold1a-key1": {"name": "echo"},
-	                    "fold1a-key2": {"name": "foxtrot"},
-	                    "fold1a-key3": {"name": "golf"}
-	                }
-	            }
+				"refresh": {"name": "刷新", "icon": "refresh"},
+				"quanping": {"name": "切换全屏"},
+				"sep1": "---------",
+				"edit0": {"name": "以下功能不可用", icon: "warning"},
+				"edit1": {"name": "查看"},
+				"edit2": {"name": "排序方式"},
+				"edit3": {"name": "复制"},
+				"edit4": {"name": "粘贴"},
+				"edit5": {"name": "粘贴快捷方式"},
+				"edit6": {"name": "新建"},
+				"edit7": {"name": "显示设置"},
+				"edit8": {"name": "个性化"},
+				"sep2": "---------",
+				"edit": {name: "Edit", icon: "edit"},
+				"cut": {name: "Cut", icon: "cut"},
+				"copy": {name: "Copy", icon: "copy"},
+				"paste": {name: "Paste", icon: "paste"},
+				"delete": {name: "Delete", icon: "delete"},
+				"sep1": "---------",
+				"quit": {name: "Quit", icon: "quit"}
 	        }
 		});
 	});
+	
+	$("#start_div").click(function(){
+		$("#start_menu").remove();
+		var temp_start_menu = $("<div><span style='font-size: 1.5em;'>开始菜单是空的</span></div>");
+		temp_start_menu.attr("id","start_menu");
+		$("#innerdesktop").append(temp_start_menu);
+		temp_start_menu.hide().attr("tabindex","-1");
+		temp_start_menu.css({"width":"350px","height":"550px","position":"absolute","bottom":$("#taskbar").css("height"),"left":"0px","z-index":"2"});
+		temp_start_menu.css({"color":"white","background-color":"rgba(0,0,0,0.85)"});
+		temp_start_menu.css({"border-top":"0.5px solid rgba(255,255,255,0.2)","border-right":"0.5px solid rgba(255,255,255,0.2)","outline":"none"});
+		temp_start_menu.slideDown(200);
+		temp_start_menu.focus();
+		temp_start_menu.blur(function(){
+			temp_start_menu.fadeOut(100,function(){ $(this).remove(); });
+		});
+		var temp_div = $("<div><span style='color: red;display:none;'>0</span></div>");
+		temp_div.css({width:"100%",height:"100%",position:"absolute",top:"0px",left:"0px"});
+		temp_div.click(function(){ $(this).remove(); });
+		$("#desktop").append(temp_div);
+	});
+
+//	$(".desktop_icon").dblclick(function(){
+//		var temp_window_id = "#"+$(this).attr("window_name");
+//		$(temp_window_id).show();
+//	});
+//	$(".desktop_window").draggable({scroll: false, handle:".window_title_bar"});
 </script>
-<script src="js/desktop_icon.js"></script>
