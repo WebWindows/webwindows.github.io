@@ -94,3 +94,37 @@
 										target_window.show();
 										console.log("ok , last now");
 									});
+									
+									
+//		temp_start_menu.attr("id","start_menu");
+//		$("#innerdesktop").append(temp_start_menu);
+//		temp_start_menu.hide().attr("tabindex","-1");
+//		temp_start_menu.css({"width":"350px","height":"550px","position":"absolute","bottom":$("#taskbar").css("height"),"left":"0px","z-index":"2"});
+//		temp_start_menu.css({"color":"white","background-color":"rgba(0,0,0,0.85)"});
+//		temp_start_menu.css({"border-top":"0.5px solid rgba(255,255,255,0.2)","border-right":"0.5px solid rgba(255,255,255,0.2)","outline":"none"});
+
+//		$(".desktop_window").each(function(tmp_ele){
+//			console.log(tmp_ele.toString());
+//			tmp_ele = $(tmp_ele);
+//			console.log(tmp_ele.toString());
+//			if(tmp_ele.css("display") != "none"){
+//				flag_to_hide = true;
+//			}
+//		});
+//		$(".desktop_window").each(function(tmp_ele){
+//			console.log(tmp_ele.toString());
+//			tmp_ele = $(tmp_ele);
+//			console.log(tmp_ele.toString());
+////			if(flag_to_hide){
+////				tmp_ele.hide();
+////			}
+////			else{
+////				tmp_ele.show();
+////			}
+//		});
+
+//	$(".desktop_icon").dblclick(function(){
+//		var temp_window_id = "#"+$(this).attr("window_name");
+//		$(temp_window_id).show();
+//	});
+//	$(".desktop_window").draggable({scroll: false, handle:".window_title_bar"});
