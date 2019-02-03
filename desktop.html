@@ -1,0 +1,97 @@
+<style id="desktop_css">
+	#desktop{
+		display: -moz-box;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		-moz-box-orient: vertical;
+		-webkit-box-orient: vertical;
+	}
+	#desktop *{
+		user-select: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	#innerdesktop{
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 100%;
+		-moz-box-flex: 1;
+		-webkit-box-flex: 1;
+	}
+	#taskbar{
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 100%;
+		height: 40px;
+		background-color: rgba( 0, 0, 0, 0.8);
+	}
+	/* .fakewindowcontain */
+</style>
+<link rel="stylesheet" href="css/desktop_icon.css" />
+<script src="js/blockDrag.js"></script>
+<div id="innerdesktop"></div>
+<div id="taskbar">
+	
+</div>
+
+<script id="desktop_icon_js">
+	var num_of_desktop_icon = 0;
+	function desktop_refresh(){
+		num_of_desktop_icon = 0;
+		var window_width = window.innerWidth;
+		var window_height = window.innerHeight;
+		window_height = window_height - $("#taskbar").height();
+		var desktop_icons_per_lie = Math.floor((window_height) / 100);
+		var desktop_icons_per_hang = Math.floor(window_width / 75);
+		var cnt_of_all_block = "(" + desktop_icons_per_lie + "," + desktop_icons_per_hang + ")";
+		$(".desktop_icon").each(function(){
+			num_of_desktop_icon++;
+			// console.log("num_of_desktop_icon " + num_of_desktop_icon);
+			var the_id = "desktop_icon_" + num_of_desktop_icon;
+			$(this).attr("id" , the_id);
+			var tmp_lie_pos = Math.floor(num_of_desktop_icon / desktop_icons_per_lie) + 1;
+			var tmp_hang_pos = num_of_desktop_icon % desktop_icons_per_lie;
+			if(tmp_hang_pos == 0){
+				tmp_lie_pos--;
+				tmp_hang_pos = desktop_icons_per_lie;
+			}
+			var tmp_icon_pos = "(" + tmp_hang_pos + "," + tmp_lie_pos + ")";
+			// console.log("icon_pos:" + tmp_icon_pos + ".the_end");
+			if($(this).parent().attr("id") != "innerdesktop"){
+				$(this).unwrap();
+			}
+			var temp=new blockDrag({
+				boxNode: "#innerdesktop",
+				dragNode: "#" + the_id,
+				blockW: 75,
+				blockH: 100,
+				block: cnt_of_all_block,
+				startPos: tmp_icon_pos
+			});
+			// $(this).find("span").html("此电脑" + num_of_desktop_icon);
+			// console.log(temp);
+		});
+	}
+	function add_desktop_shortcut(shortcut_name,img_src){
+		var tmp_element = $("<div>");
+		tmp_element.addClass("desktop_icon");
+		tmp_element.append('<div><img/><span></span></div>');
+		tmp_element.find("img").attr({"src":img_src,"draggable":"false"});
+		tmp_element.find("span").html(shortcut_name);
+		tmp_element.attr('tabindex',"-1");
+		tmp_element.bind('click', function () { this.focus(); });
+			// console.log(tmp_element.html() );
+		$("#innerdesktop").append(tmp_element);
+		desktop_refresh();
+	}
+	$.getJSON("setting/desktop_icons.json",function(json){
+		$.each(json.shortcut,function(){
+			add_desktop_shortcut(this.name , this.imgsrc);
+		});
+		desktop_refresh();
+	});
+	$(window).resize(function(){desktop_refresh();});
+</script>

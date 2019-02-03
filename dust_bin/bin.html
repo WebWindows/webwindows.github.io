@@ -1,0 +1,130 @@
+<style>
+			#boot{
+				width: 100%;
+				height:100%;
+				text-align: center;
+				background-color: rgba(0,0,0,1);
+				position: absolute;
+				z-index: 100;
+			}
+			border-style:dashed ;border-color: red ;
+			
+	#innerdenglu {
+		box-sizing: border-box;
+		/*border: 1px solid rgba(255,255,255,0);*/
+		background-color: rgba(255,255,255,0);
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		font-size: 18px;
+	}
+	
+		/*outline-offset: 2px;*/
+		
+</style>
+<script>
+			function goto_login (){
+				var load_time = new Date();
+				var used_time = (load_time - start_time);
+				console.log(used_time + "秒 还需等待 " +(6000-used_time) + "毫秒");
+				if(used_time < 5500)
+				{
+					setTimeout(goto_login() , 500 );
+					return ;
+				}
+				else
+				{
+					console.log("开机完毕，用时 " + used_time + "毫秒。");
+					//alert("加载完毕。");
+					$("#login").show();
+					$("#desktop").show();
+				}
+			}
+//			$("body").unbind('keydown');
+//			$("body").unbind("click");
+//			$("body").click(function(){
+//				cnt = 1;
+//				console.log("你已经按键过了。" + cnt);
+//				cnt = cnt + 1;
+//			});
+
+//				$("#login").load("login.html",function (){
+//					end_load_login = true;
+//				});
+//				$("#desktop").load("desktop.html",function (){
+//					end_load_desktop = true;
+//				});
+
+
+	// function login_mousedown(e){
+	// 	if(e.which == 1){
+	// 		console.log("login mouse down , denglu 取消绑定 mouseup");
+	// 		$("#denglu").unbind("mouseup");
+	// 	}
+	// 	else{
+	// 		return false;
+	// 	}
+	// }
+
+
+	
+</script>
+<!--<img src="img/login_wallpaper.jpg" style="width: 100%;height: 100%;position: absolute;z-index: inherit;"/>-->
+
+
+		<!--<div style="border: solid red 1px;">
+			<input id="password_input" type="password" placeholder="Password" />
+			<input id="check_password" type="button" style="float:  inherit;
+															height: inherit;
+															width: ;
+							 								"/>
+		</div>-->
+
+
+			//	$("#denglu").click(function(){
+			//		$("#denglu").hide();
+			//		$("#please_wait").show();
+			//		$("#wait_span").html("请稍等...");
+			//		setTimeout('$("#wait_span").html("欢迎");',300);
+			//		setTimeout('login_out();',1300);
+			//	});
+			
+			
+			<!--<img src="img/login_wallpaper.jpg" style="width: 100%;height: 100%;position: absolute;z-index: inherit;"/>-->
+			
+			
+			
+//	$("#dragme").dialog({
+//		open: false
+//	});
+//  $(".desktop_icon").click(function(e){
+//  	$(".desktop_icon").attr("tabindex","-1");
+//  	this.focus();
+//  });
+//  $(".desktop_icon").focus(function(){
+//  	console.log("desktop icon focus !");
+//  });
+//  $("#dragme").click(function(e){
+//  	$("#dragme").attr("tabindex","-1");
+//  	this.focus();
+//  });
+//  $("#dragme").focus(function(){
+//  	console.log("dragme focus !");
+//  });
+//	$("#dragme").attr('tabindex',"-1").focus(function(){
+//		console.log("dragme focus !");
+//	}).blur(function(){
+//		console.log("dragme blur !");
+//	});
+//	$("#dragme").click(function(){
+//		this.focus();
+//	});
+//	$(".desktop_icon").click(function(){
+//		this.focus();
+//	});
+
+		<!-- <div id="dragme" class="window ui-widget-content fakewindowcontain" style="width: 200px;height: 200px;border: 1px solid red;">
+			2333333333 <br>
+			2333333333
+			<p style="text-shadow: 0px 0px 2px black;color: white;">请拖动我！</p>
+		</div> -->

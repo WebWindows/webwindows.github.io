@@ -1,0 +1,104 @@
+<style id="main_login_css">
+		.window{
+			position: absolute;
+		}
+</style>
+<style>
+	#denglu {
+	    width: 24%;
+	    height: 5%;
+	    text-align: center;
+	    margin-left: 38%;
+	    margin-top: 1%;
+	    border: 1px solid rgba(255,255,255,0.5);
+	    background-color: rgba(255,255,255,0.3);
+	}
+	#innerdenglu {
+	    border: 1px solid rgba(255,255,255,0);
+	    width: 100%;
+	    height: 100%;
+	    text-align: center;
+	    font-size: 20px;
+	}
+	#innerdenglu:hover{
+		border: 1px solid rgba(255,255,255,1);
+	}
+</style>
+	<div id ="login_cover" style="background-color: rgba(0,0,0,0.4); opacity: 0.5; width: 100%;height: 100%;position: absolute;z-index: inherit;"></div>
+	<div id="login_1" style="font-family: 'microsoft yahei'; color: white;height: 30%;width: 100%; position: absolute;z-index: inherit;bottom: 0%;white-space: nowrap;">
+		<div id="now_time" style="font-size: 88px;font-weight: 300;position: absolute; z-index:inherit;width: 50%;height: 100px;left: 2.5%;bottom: 55%;"></div>
+		<div id="now_date" style="font-size: 44px;font-weight: 400;position: absolute;z-index:inherit;width: 50%;height: 50px;left: 2.5%;bottom: 30%;"></div>
+	</div>
+	<div id="login_2" style="color: white;text-align: center;width: 50%;height: 100%;position: absolute;z-index: inherit;top: 0%;left: 25%;
+							border: 0.1px red dotted ;">
+		<img src="img/user_head.svg" style="margin-top: 30%;width: 38%;"/>
+		<div style="margin-top: 2%;
+					width: 100%;
+					font-size: 46px;
+					font-weight: 100;">
+			User
+		</div>
+		<!--<div style="border: solid red 1px;">
+			<input id="password_input" type="password" placeholder="Password" />
+			<input id="check_password" type="button" style="float:  inherit;
+															height: inherit;
+															width: ;
+							 								"/>
+		</div>-->
+		<div id="denglu"><div id="innerdenglu">登录</div></div>
+	</div>
+	
+	
+	
+	
+	
+	
+<script id="login_script">
+	$("#main_css").append( $("#main_login_css").html() );
+	$("#main_login_css").remove();
+		$("#login").css("background-image","url(img/login_wallpaper.jpg)");
+		$("#login").css("background-size","133%");
+		$("#login").css("background-position","center center");
+		$("#login").css("background-repeat","no-repeat");
+	$("#login_2").hide();
+	
+	var day = new Array("日","一","二","三","四","五","六");
+	var tt = new Date();
+//	console.log("当前时间：" + tt.getHours() + "时" + tt.getMinutes() + "分" + tt.getSeconds() + "秒，周" + day[tt.getDay()] + "。\n\t还需要等待" + (59-tt.getSeconds()) + "秒" + (1000-tt.getMilliseconds()) + "毫秒设置时间。");
+//	var wait_time = ((59-tt.getSeconds())*1000 + (1000-tt.getMilliseconds()));
+	var set_update_login = setTimeout("update_login_time()" , 10);
+//	console.log(wait_time + "毫秒后将设置时间。");
+	
+	$("body").keydown(function(e){
+//		console.log("键盘事件： " + '"' + String.fromCharCode(e.keyCode) + '" ' + e.keyCode);
+		if(!($("#boot").length > 0) ){
+			login1_out();
+		}
+	});
+	$("#login").click(function(){
+		login1_out();
+		$("#login").unbind('click');
+	});
+	function update_login_time(){
+		var now = new Date();
+		var wait_time = ((59-now.getSeconds())*1000 + (1000-now.getMilliseconds()));
+		var hours = now.getHours();
+		var mins = now.getMinutes();
+		if(hours < 10) hours = '0' + hours;
+		if(mins < 10) mins = '0' + mins;
+		$("#now_time").html( hours + ":" + mins);
+		$("#now_date").html( now.getMonth()+1 + "月" + now.getDate() + "日, 星期" + day[now.getDay()] );
+//		console.log("在" + $("#now_time").html()  + " " + now.getSeconds() + "," + now.getMilliseconds() + ",我设置了时间。");
+//		console.log(wait_time + "毫秒后将再次设置时间。");
+		set_update_login = setTimeout("update_login_time()" , wait_time);
+	}
+	function login1_out(){
+		$("#login_1").animate({"bottom": "+=100%" , "opacity": "0.3"} , 300 , function (){
+//			console.log("你单击了#login,或者键盘事件.");
+			$("#login_1").remove();
+			$("#login_cover").fadeTo(1000,1);
+			$("#login").animate({"background-size": "137%"} , 500);
+			$("#login_2").fadeIn(500);
+		});
+	}
+</script>
