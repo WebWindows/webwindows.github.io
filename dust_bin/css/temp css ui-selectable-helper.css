@@ -1,0 +1,19 @@
+<div id="father">
+  <div id="container"></div>
+</div>
+
+
+#container {
+    width: 300px;
+    height: 100px;
+    margin: 0 auto;
+    border: 1px dotted white;
+    
+    -webkit-box-shadow: -1 0 1px 2px black;
+    -moz-box-shadow: -1 0 1px 2px black;
+    box-shadow: -1 0 1px 2px black;
+}
+#father{
+  height: 200px;
+    background-color: darkgreen;
+}

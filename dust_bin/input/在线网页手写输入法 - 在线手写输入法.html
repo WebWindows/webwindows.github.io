@@ -1,0 +1,146 @@
+
+<!-- saved from url=(0024)http://ie.q1qq2.com/ime/ -->
+<html>
+<head>
+<meta charset=UTF-8">
+
+<style type="text/css">
+a:link {
+	color: #0066CC;
+	text-decoration: none;
+}
+a:visited {
+	color: #0066CC;
+	text-decoration: none;
+}
+a:hover {
+	color: #F00;
+	text-decoration: none;
+}
+a:active {
+	color: #F00;
+	text-decoration: none;
+}
+body {
+	margin:auto;
+	width:903px;
+}
+#container{	
+width:0%; height:0%;
+}
+</style>
+<script src="./在线网页手写输入法 - 在线手写输入法_files/share.js.下载"></script><link rel="stylesheet" href="./在线网页手写输入法 - 在线手写输入法_files/share_style0_16.css"><link rel="stylesheet" type="text/css" href="./在线网页手写输入法 - 在线手写输入法_files/handwritingapi.css"></head>
+	<body onload="init()">
+   
+
+<div style="float:none; height:50px; padding:10px; ">
+<a href="http://ie.q1qq2.com/">首页</a> （ 如果网页版不好用或不能用，请下载软件版：<a href="http://www.443w.com/yun/" target="_blank">云手写输入法</a> ） &nbsp; &nbsp;<a href="http://ie.q1qq2.com/" title="我的起始页" target="_blank">我的起始页</a>&nbsp;　<a href="http://www.ttsini.com/" title="朗读软件：朗读女" target="_blank">朗读女</a>&nbsp; <a href="http://www.443w.com/1234/" target="_blank">1234笔画输入法</a> &nbsp; <a href="http://www.443w.com/" target="_blank">阿嘉</a>
+</div>
+<div style="float:left; width:450px;">
+ <textarea style="width:450px;height:315px;" cols="60" rows="21" id="kw"></textarea> <p><input type="button" onclick="copyUrl2()" value="点击复制代码">   
+ &nbsp; <a href="http://ie.q1qq2.com/ime/py.html" target="_blank">在线拼音输入法 </a>&nbsp;　<a href="javascript:(function(){t2=document.createElement(&quot;link&quot;);t2.setAttribute(&quot;type&quot;,&quot;text/css&quot;);t2.setAttribute(&quot;rel&quot;,&quot;stylesheet&quot;);t2.setAttribute(&quot;href&quot;,&quot;http:\/\/www.yibizi.com/ybz_core/core/skins/green.css&quot;);document.body.appendChild(t2);t=document.createElement(&quot;script&quot;); t.setAttribute(&quot;type&quot;,&quot;text/javascript&quot;);t.setAttribute(&quot;src&quot;,&quot;http:\/\/www.yibizi.com/ybz_core/core/ybz.min.js&quot;);document.body.appendChild(t); YBZ_follow = false;try{YBZ_open();}catch(e){}})();" onfocus="this.blur()" title="双击打开，中文，日文，韩文，手写输入模式。">打开：中日韩文手写</a></p>
+</div>
+<div style="float:right;  width:450px;">
+<span id="container"><div id="qqshuru_container"><div id="qqshuru_header"><span id="qqshuru_title">云手写输入法</span></div><canvas id="qqshuru_canvas" width="300" height="287" class="writting"></canvas><table id="qqshuru_candidate" cellspacing="0" cellpadding="0" border="0"><tbody><tr class="qqshuru_base_tr"><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr class="qqshuru_three_tds"><td colspan="2">我</td><td colspan="2">外</td><td colspan="2" class="qqshuru_last_td">秭</td></tr><tr class="qqshuru_three_tds"><td colspan="2">按</td><td colspan="2">秘</td><td colspan="2" class="qqshuru_last_td">轨</td></tr><tr class="qqshuru_three_tds"><td colspan="2">驰</td><td colspan="2">拽</td><td colspan="2" class="qqshuru_last_td">抛</td></tr><tr class="qqshuru_three_tds"><td colspan="2"></td><td colspan="2"></td><td colspan="2" class="qqshuru_last_td"></td></tr><tr class="qqshuru_two_tds"><td colspan="3">我们</td><td colspan="3" class="qqshuru_last_td">我的</td></tr><tr class="qqshuru_two_tds"><td colspan="3">我是</td><td colspan="3" class="qqshuru_last_td">我去</td></tr><tr class="qqshuru_one_td"><td colspan="6">我不知道</td></tr><tr class="qqshuru_last_tr"><td colspan="2"></td><td colspan="2"></td><td colspan="2" class="qqshuru_last_td"></td></tr></tbody></table><div id="qqshuru_operate_panel"><span id="qqshuru_back_btn">退笔</span><span id="qqshuru_clear_btn">重写</span></div></div></span>
+</div>
+
+
+<script src="http://hm.baidu.com/hm.js?b0375560ad3241cf142ba05b833b6774"></script><script type="text/javascript">
+function copyUrl2()
+{
+var Url2=document.getElementById("kw");
+Url2.select(); // 选择对象
+document.execCommand("Copy"); // 执行浏览器复制命令
+alert("已复制好，可贴粘。");
+}
+</script>
+
+
+
+	<script type="text/javascript" src="./在线网页手写输入法 - 在线手写输入法_files/handwritingapi.js.下载"></script>
+	<script type="text/javascript">
+			
+			//document.domain = 'qq.com';
+			var container = document.getElementById('container');
+			
+			//用户手写完选择了文本之后这个函数就会被调用，result就是个字符串~~
+			function handWriteCallback(result){
+				if(result!="")
+				if(parent.exsit	){
+					parent.ChatBox(result);
+				}
+			}
+			
+			function init(){
+				QQShuru.HWPanel(container, handWriteCallback);
+			}
+			
+		</script>
+
+
+<script type="text/javascript">
+function insertAtCursor(myField, myValue) {
+//IE support
+if (document.selection) {
+myField.focus();
+sel = document.selection.createRange();
+sel.text = myValue;
+sel.select();
+}
+//MOZILLA/NETSCAPE support 
+else if (myField.selectionStart || myField.selectionStart == '0') {
+var startPos = myField.selectionStart;
+var endPos = myField.selectionEnd;
+// save scrollTop before insert www.keleyi.com
+var restoreTop = myField.scrollTop;
+myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+if (restoreTop > 0) {
+myField.scrollTop = restoreTop;
+}
+myField.focus();
+myField.selectionStart = startPos + myValue.length;
+myField.selectionEnd = startPos + myValue.length;
+} else {
+myField.value += myValue;
+myField.focus();
+}
+} 
+</script>
+
+<script>
+function exsit(){
+	if(document.getElementById("kw"))
+	return true;
+	else
+	return false;
+}
+function ChatBox(result){
+	document.getElementById("kw").focus();
+	//document.getElementById("kw").innerHTML+=result;
+	insertAtCursor(document.getElementById('kw'),result)
+}
+</script>
+  
+  
+
+
+<script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <!-- 728x90, 标准页尾广告 --> <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-0679898690651827" data-ad-slot="7469528282"></ins> <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script><br><br>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?b0375560ad3241cf142ba05b833b6774";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+<p></p>
+<div class="bdsharebuttonbox bdshare-button-style0-16" data-bd-bind="1519384569595"><a href="http://ie.q1qq2.com/ime/#" class="bds_more" data-cmd="more">分享到：</a><a href="http://ie.q1qq2.com/ime/#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="http://ie.q1qq2.com/ime/#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="http://ie.q1qq2.com/ime/#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a><a href="http://ie.q1qq2.com/ime/#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a><a href="http://ie.q1qq2.com/ime/#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a><a href="http://ie.q1qq2.com/ime/#" class="bds_bdhome" data-cmd="bdhome" title="分享到百度新首页">百度新首页</a><a href="http://ie.q1qq2.com/ime/#" class="bds_copy" data-cmd="copy" title="分享到复制网址">复制网址</a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+</body></html>

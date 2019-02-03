@@ -1,0 +1,250 @@
+<style id="desktop_css">
+	#desktop{
+		display: -moz-box;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		-moz-box-orient: vertical;
+		-webkit-box-orient: vertical;
+	}
+	#desktop *{
+		user-select: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	#innerdesktop{
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 100%;
+		-moz-box-flex: 1;
+		-webkit-box-flex: 1;
+	}
+	.desktop_icon > div:hover{
+		background-color: rgba(255,255,255,0.1);
+	}
+	/*.desktop_icon css 见 css/desktop_icon.css*/
+	/*#innerdesktop div.ui-selecting div,#innerdesktop div.ui-selected div,*/
+	div.desktop_icon div.ui-selecting,
+	div.desktop_icon div.ui-selecting,
+	div.desktop_icon div.ui-selected,
+	div.desktop_icon div.ui-selected{
+		background-color: rgba(255,255,255,0.2);
+	}
+	.ui-selectable-helper {
+		border: 1px dotted white;
+		-webkit-box-shadow: 0 0 0.2px black,inset 0 0 0.2px black;
+		-moz-box-shadow:    0 0 0.2px black,inset 0 0 0.2px black;
+		box-shadow:         0 0 0.2px black,inset 0 0 0.2px black;
+	}
+	#taskbar{
+		display: box;
+		display: -webkit-box;
+		display: -moz-box;
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 100%;
+		height: 40px;
+		background-color: rgba( 0, 0, 0, 0.8);
+	}
+	#taskbar div.taskbaricon{
+		height: 100%;
+		width: 50px;
+		margin: 0px;
+		background-position: center;
+		background-size: 17px;
+		background-repeat: no-repeat;
+	}
+	#taskbar div.taskbaricon:hover{
+		background-color: rgba(255,255,255,0.15);
+	}
+	#start_div{
+		background-image: url(img/Windows_logo_white.svg);
+	}
+	#start_div:hover{
+		background-image: url(img/Windows_logo.svg);
+	}
+	#program_list{
+		/*display: inline-flex;*/
+		-moz-box-flex: 1;
+		-webkit-box-flex: 1;
+		box-flex: 1;
+		display: box;
+		display: -moz-box;
+		display: -webkit-box;
+		/*background-color: yellow;*/
+	}
+	div.program{
+		-moz-box-flex: 1;
+		-webkit-box-flex: 1;
+		/*height: 100%;*/
+		max-width: 160px;
+		text-align: center;
+		color: white;
+		/*border: 1px solid red;*/
+	}
+	div.program:hover{
+		background-color: rgba(255,255,255,0.15);
+	}
+	div.program div{
+		height: 100%;
+		width: 140px;
+	}
+	#hide_or_show_the_desktop{
+		height: 100%;
+		width: 5px;
+		background-color: red;
+	}
+	/* .fakewindowcontain */
+</style>
+<link rel="stylesheet" href="css/desktop_icon.css" />
+<div id="innerdesktop"></div>
+<div id="taskbar">
+	<div id="start_div" class="taskbaricon"></div>
+	<div class="quick_start_div taskbaricon" style="background-image: url(img/icon/tcp.ico);">
+	</div>
+	<div class="quick_start_div taskbaricon" style="background-image: url(img/Windows_logo.svg);">
+	</div>
+	<div id="program_list">
+		<div class="program">
+				<img height="30px" width="40px" src="dust_bin/js/js_dust_bin/jquery-ui-1.10.4.custom/jquery-ui-1.10.4.custom/development-bundle/demos/position/images/earth.jpg"/>
+			<div>
+				窗口1
+			</div>
+		</div>
+		<div class="program">
+			<div>
+				<!--<img height="30px" width="40px" src="www/dust_bin/js/js_dust_bin/jquery-ui-1.10.4.custom/jquery-ui-1.10.4.custom/development-bundle/demos/position/images/earth.jpg"/>-->
+				窗口2
+			</div>
+		</div>
+	</div>
+	<div id="notice_div"></div>
+	<div id="hide_or_show_the_desktop"></div>
+</div>
+
+
+<script>
+	$("#innerdesktop").selectable({ filter: "div > div" });
+	$("#program_list").sortable({axis: "x",scroll: false,tolerance: "intersect"}).disableSelection();
+</script>
+<script id="desktop_icon_js">
+	var num_of_desktop_icon = 0;
+	var desktop_icons_per_lie;
+	var desktop_icons_per_hang;
+	function desktop_refresh(){
+		num_of_desktop_icon = 0;
+		var window_width = window.innerWidth;
+		var window_height = window.innerHeight;
+		window_height = window_height - $("#taskbar").height();
+		desktop_icons_per_lie = Math.floor((window_height) / 100);
+		desktop_icons_per_hang = Math.floor((window_width) / 75);
+		var tmp_css_innerdesktop_width = desktop_icons_per_hang * 75 + "px";
+		var tmp_css_innerdesktop_height = desktop_icons_per_lie * 100 + "px";
+//		console.log("innerdesktop-width:" + tmp_css_innerdesktop_width);
+//		console.log("innerdesktop-height:" + tmp_css_innerdesktop_height);
+		$("#innerdesktop").css({width: tmp_css_innerdesktop_width,height: tmp_css_innerdesktop_height});
+//		var cnt_of_all_block = "(" + desktop_icons_per_lie + "," + desktop_icons_per_hang + ")";
+		$(".desktop_icon").each(function(){
+			num_of_desktop_icon++;
+			// console.log("num_of_desktop_icon " + num_of_desktop_icon);
+			var the_id = "desktop_icon_" + num_of_desktop_icon;
+			$(this).attr("id" , the_id);
+			var tmp_lie_pos = Math.floor(num_of_desktop_icon / desktop_icons_per_lie) + 1;
+			var tmp_hang_pos = num_of_desktop_icon % desktop_icons_per_lie;
+			if(tmp_hang_pos == 0){
+				tmp_lie_pos--;
+				tmp_hang_pos = desktop_icons_per_lie;
+			}
+			var tmp_css_top = (tmp_hang_pos-1) * 100 + "px";
+			var tmp_css_left = (tmp_lie_pos-1) * 75 + "px";
+			$(this).css({top: tmp_css_top , left: tmp_css_left});
+			// $(this).find("span").html("此电脑" + num_of_desktop_icon);
+			// console.log(temp);
+		});
+		$(".the_focus").removeClass("the_focus");
+	}
+	function add_desktop_shortcut(shortcut_name,img_src){
+		var tmp_element = $("<div>");
+		tmp_element.addClass("desktop_icon");
+		tmp_element.append('<div><img/><span></span></div>');
+		tmp_element.find("img").attr({"src":img_src,"draggable":"false"});
+		tmp_element.find("span").html(shortcut_name);
+		tmp_element.droppable()
+					.draggable({
+						revert: "valid",
+						scroll: false,
+						handle: "div img,div span",
+						start: function(){
+							$(this).attr("start_css_top",$(this).position().top);
+							$(this).attr("start_css_left",$(this).position().left);
+						},
+						drag: function(){
+							if($(this).children().first().hasClass("ui-selected")){
+								var tmp_id = $(this).attr("id");
+								console.log();
+								var d_top = $(this).position().top - $(this).attr("start_css_top");
+								var d_left = $(this).position().left - $(this).attr("start_css_left");
+								console.log("d_top: " + d_top + " d_left: " + d_left);
+//								console.log("has class !");
+								console.log("id: " + $(this).attr("id"));
+								var what_selected = $("div.desktop_icon > div.ui-selected");
+//								console.log(what_selected.get(0).css("top"));
+								what_selected.each(function(index,tmp_obj) {
+//									console.log("tmp_obj: " + $(this).parent().html()  );
+//									$(this).parent().css("top", ( $(this).position().top+d_top) +"px");
+//									$(this).parent().css("left", ($(this).position().left+d_left)+"px");
+									if($(this).parent().attr("id") != tmp_id){
+										
+									}
+								});
+								console.log(what_selected);
+							}
+						},
+						stop: function() {
+							get_correct_position($(this));
+						}
+					})
+					.click(function() {$(this).children().first().addClass("ui-selected");$(".the_focus").removeClass("the_focus");$(this).addClass("the_focus");})
+					.css("position", "absolute");
+		$("#innerdesktop").append(tmp_element);
+		desktop_refresh();
+	}
+	function get_correct_position(tmp_jquery_obj){
+		var tmp_css_left = parseInt( tmp_jquery_obj.css("left"));
+		var tmp_css_top = parseInt( tmp_jquery_obj.css("top"));
+		var half_75 = 75/2;
+		var half_100 = 100/2;
+		var t = parseInt(tmp_css_top / half_100);
+		var l = parseInt(tmp_css_left / half_75);
+//		console.log(" t1:" + t + " l1:" + l);
+		t = (t < 0 ? 0 : t);
+		l = (l < 0 ? 0 : l);
+//		console.log(" t2:" + t + " l2:" + l);
+			console.log("per_hang: " + desktop_icons_per_hang + " per_lie: " + desktop_icons_per_lie);
+			console.log("t:" + t + " per hang-1: " + (desktop_icons_per_hang - 1));
+			console.log(l > (desktop_icons_per_hang - 1));
+			console.log("t: " + t + " l: " + l);
+		t = (t > (desktop_icons_per_lie - 1) * 2 ? (desktop_icons_per_hang - 1) * 2 : t);
+		l = (l > (desktop_icons_per_hang - 1) * 2 ? (desktop_icons_per_lie - 1) * 2 : l);
+			console.log("tt: " + t + " ll: " + l);
+//		console.log(" t3:" + t + " l3:" + l);
+		if (t % 2 == 0) {
+			tmp_jquery_obj.css({top: (((t + 2) / 2) - 1) * 100 + "px"});
+		} else {
+			tmp_jquery_obj.css({top: (((t + 3) / 2) - 1) * 100 + "px"});
+		} if (l % 2 == 0) {
+			tmp_jquery_obj.css({left: (((l + 2) / 2) - 1) * 75 + "px"});
+		} else {
+			tmp_jquery_obj.css({left: (((l + 3) / 2) - 1) * 75 + "px"});
+		}
+	}
+	$.getJSON("setting/desktop_icons.json",function(json){
+		$.each(json.shortcut,function(){
+			add_desktop_shortcut(this.name , this.imgsrc);
+		});
+		desktop_refresh();
+	});
+	$(window).resize(function(){desktop_refresh();});
+</script>

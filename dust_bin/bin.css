@@ -5,4 +5,32 @@
 		-moz-column-gap: 0px;
         column-gap: 0px; */
         
-        
+	/*#innerdesktop .ui-selected {
+		background: #F39814;
+		color: white;
+	}*/
+	
+	/*#innerdesktop .ui-selecting:after, #innerdesktop .ui-selected:after {
+		content: "ed";
+	}*/
+	
+	/*#selectable {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		width: 450px;
+	}*/
+	/*#selectable div {
+		margin: 3px;
+		padding: 1px;
+		float: left;
+		width: 100px;
+		height: 80px;
+		font-size: 4em;
+		text-align: center;
+	}*/
+	
+	<!-- style="background-image: url(img/Windows_logo_white.svg);"-->
+	<!-- style="background-image: url(img/icon/tcp.ico);"-->
+	
+	$("#program_list").sortable({axis: "x",/*containment: "parent",*/scroll: false,tolerance: "intersect"});
