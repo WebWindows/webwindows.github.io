@@ -1,5 +1,6 @@
 	$("#shutdown_button").click(function(){
 		if( confirm("页面即将关闭，你真的要关机么？") == true){
+			window.location.href="about:blank";
 			window.close();
 		}
 	});
