@@ -1,169 +1,141 @@
 
 
+/** Used by the Colors Box and by the Edit Colors dialog */
 function $Swatch(color){
-	var $b = $(E("div")).addClass("swatch");
-	var swatch_canvas = new Canvas();
-	$(swatch_canvas).css({pointerEvents: "none"}).appendTo($b);
+	const $swatch = $(E("div")).addClass("swatch");
+	const swatch_canvas = make_canvas();
+	$(swatch_canvas).css({pointerEvents: "none"}).appendTo($swatch);
 	
-	$b.update = function(_color){
-		color = _color;
-		if(color instanceof CanvasPattern){
-			$b.addClass("pattern");
-		}else{
-			$b.removeClass("pattern");
-		}
-		
-		requestAnimationFrame(function(){
-			swatch_canvas.width = $b.innerWidth();
-			swatch_canvas.height = $b.innerHeight();
-			// I don't think disable_image_smoothing() is needed here
-			
-			if(color){
-				swatch_canvas.ctx.fillStyle = color;
-				swatch_canvas.ctx.fillRect(0, 0, swatch_canvas.width, swatch_canvas.height);
-			}
-		});
-	};
-	$G.on("theme-load", function(){
-		$b.update(color);
-	});
-	$b.update(color);
+	// TODO: clean up event listener
+	$G.on("theme-load", ()=> { update_$swatch($swatch); });
+	$swatch.data("swatch", color);
+	update_$swatch($swatch, color);
 	
-	return $b;
+	return $swatch;
 }
 
-function $ColorBox(){
-	var $cb = $(E("div")).addClass("color-box");
+function update_$swatch($swatch, new_color) {
+	if (new_color instanceof CanvasPattern) {
+		$swatch.addClass("pattern");
+		$swatch[0].dataset.color = "";
+	} else if (typeof new_color === "string") {
+		$swatch.removeClass("pattern");
+		$swatch[0].dataset.color = new_color;
+	} else if (new_color !== undefined) {
+		throw new TypeError(`argument to update must be CanvasPattern or string (or undefined); got type ${typeof new_color}`);
+	}
+	new_color = new_color || $swatch.data("swatch");
+	$swatch.data("swatch", new_color);
+	const swatch_canvas = $swatch.find("canvas")[0];
+	requestAnimationFrame(() => {
+		swatch_canvas.width = $swatch.innerWidth();
+		swatch_canvas.height = $swatch.innerHeight();
+		if (new_color) {
+			swatch_canvas.ctx.fillStyle = new_color;
+			swatch_canvas.ctx.fillRect(0, 0, swatch_canvas.width, swatch_canvas.height);
+		}
+	});
+}
+
+function $ColorBox(vertical){
+	const $cb = $(E("div")).addClass("color-box");
 	
-	var $current_colors = $Swatch().addClass("current-colors");
-	var $palette = $(E("div")).addClass("palette");
+	const $current_colors = $Swatch(colors.ternary).addClass("current-colors");
+	const $palette = $(E("div")).addClass("palette");
 	
 	$cb.append($current_colors, $palette);
 	
-	var $foreground_color = $Swatch().addClass("color-selection");
-	var $background_color = $Swatch().addClass("color-selection");
+	const $foreground_color = $Swatch(colors.foreground).addClass("color-selection foreground-color");
+	const $background_color = $Swatch(colors.background).addClass("color-selection background-color");
 	$current_colors.append($background_color, $foreground_color);
 	
-	$current_colors.css({
-		position: "relative",
-	});
-	$foreground_color.css({
-		position: "absolute",
-		left: 2,
-		top: 4,
-	});
-	$background_color.css({
-		position: "absolute",
-		right: 3,
-		bottom: 3,
+	$G.on("option-changed", () => {
+		update_$swatch($foreground_color, colors.foreground);
+		update_$swatch($background_color, colors.background);
+		update_$swatch($current_colors, colors.ternary);
 	});
 	
-	$G.on("option-changed", function(){
-		$foreground_color.update(colors.foreground);
-		$background_color.update(colors.background);
-		$current_colors.update(colors.ternary);
-	});
-	
-	$current_colors.on("pointerdown", function(){
-		var new_bg = colors.foreground;
+	$current_colors.on("pointerdown", () => {
+		const new_bg = colors.foreground;
 		colors.foreground = colors.background;
 		colors.background = new_bg;
 		$G.triggerHandler("option-changed");
 	});
 	
-	// the one color editted by "Edit Colors..."
-	var $last_fg_color_button;
-	
-	// TODO: base this on the element sizes
-	var width_per_button = 16;
-	
-	var build_palette = function(){
-		$palette.empty();
-		$.each(palette, function(i, color){
-			var $b = $Swatch(color).addClass("color-button");
-			$b.appendTo($palette);
-			
-			// the "last foreground color button" starts out as the first in the palette
-			if(i === 0){
-				$last_fg_color_button = $b;
+	const make_color_button = (color) => {
+
+		const $b = $Swatch(color).addClass("color-button");
+		$b.appendTo($palette);
+		
+		const double_click_period_ms = 400;
+		let within_double_click_period = false;
+		let double_click_button = null;
+		let double_click_tid;
+		// @TODO: handle left+right click at same time
+		// can do this with mousedown instead of pointerdown, but may need to improve eye gaze mode click simulation
+		$b.on("pointerdown", e => {
+			// @TODO: allow metaKey for ternary color, and selection cropping, on macOS?
+			ctrl = e.ctrlKey;
+			button = e.button;
+			if(button === 0){
+				$c.data("$last_fg_color_button", $b);
 			}
 			
-			var $i = $(E("input")).attr({type: "color"});
-			$i.appendTo($b);
-			$i.on("change", function(){
-				color = $i.val();
-				$b.update(color);
-				set_color(color);
-			});
-			
-			$i.css("opacity", 0);
-			$i.prop("enabled", false);
-			
-			$i.val(rgb2hex(color));
-			
-			var button, ctrl;
-			$b.on("pointerdown", function(e){
-				ctrl = e.ctrlKey;
-				button = e.button;
-				if(button === 0){
-					$last_fg_color_button = $b;
+			const color_selection_slot = ctrl ? "ternary" : button === 0 ? "foreground" : button === 2 ? "background" : null;
+			if (color_selection_slot) {
+				if (within_double_click_period && button === double_click_button) {
+					show_edit_colors_window($b, color_selection_slot);
+				} else {
+					colors[color_selection_slot] = $b.data("swatch");
+					$G.trigger("option-changed");
 				}
 				
-				set_color(color);
-				
-				$i.val(rgb2hex(color));
-				
-				if(e.button === button && $i.prop("enabled")){
-					$i.trigger("click", "synthetic");
-				}
-				
-				$i.prop("enabled", true);
-				setTimeout(function(){
-					$i.prop("enabled", false);
-				}, 400);
-			});
-			$i.on("click", function(e, synthetic){
-				if(!synthetic){
-					e.preventDefault();
-				}
-			});
-			
-			function set_color(col){
-				if(ctrl){
-					colors.ternary = col;
-				}else if(button === 0){
-					colors.foreground = col;
-				}else if(button === 2){
-					colors.background = col;
-				}
-				$G.trigger("option-changed");
-			};
-			function rgb2hex(col){
-				if(!col.match){ // i.e. CanvasPattern
-					return "#000000";
-				}
-				var rgb = col.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-				function hex(x){
-					return ("0" + parseInt(x).toString(16)).slice(-2);
-				}
-				return rgb ? ("#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3])) : col;
+				clearTimeout(double_click_tid);
+				double_click_tid = setTimeout(() => {
+					within_double_click_period = false;
+					double_click_button = null;
+				}, double_click_period_ms);
+				within_double_click_period = true;
+				double_click_button = button;
 			}
 		});
-		$palette.width(Math.ceil(palette.length/2) * width_per_button);
 	};
+
+	const build_palette = () => {
+		$palette.empty();
+
+		palette.forEach(make_color_button);
+
+		// Note: this doesn't work until the colors box is in the DOM
+		const $some_button = $palette.find(".color-button");
+		if (vertical) {
+			const height_per_button =
+				$some_button.outerHeight() +
+				parseFloat(getComputedStyle($some_button[0]).getPropertyValue("margin-top")) +
+				parseFloat(getComputedStyle($some_button[0]).getPropertyValue("margin-bottom"));
+			$palette.height(Math.ceil(palette.length/2) * height_per_button);
+		} else {
+			const width_per_button =
+				$some_button.outerWidth() +
+				parseFloat(getComputedStyle($some_button[0]).getPropertyValue("margin-left")) +
+				parseFloat(getComputedStyle($some_button[0]).getPropertyValue("margin-right"));
+			$palette.width(Math.ceil(palette.length/2) * width_per_button);
+		}
+
+		// the "last foreground color button" starts out as the first in the palette
+		$c.data("$last_fg_color_button", $palette.find(".color-button:first-child"));
+	};
+	let $c;
+	if (vertical) {
+		$c = $Component(localize("Colors"), "colors-component", "tall", $cb);
+		$c.appendTo(get_direction() === "rtl" ? $left : $right); // opposite ToolBox by default
+	}else{
+		$c = $Component(localize("Colors"), "colors-component", "wide", $cb);
+		$c.appendTo($bottom);
+	}
+	
 	build_palette();
-	
-	var $c = $Component("Colors", "wide", $cb);
-	
-	$c.edit_last_color = function(){
-		// Edit the last color cell that's been selected as the foreground color.
-		create_and_trigger_input({type: "color"}, function(input){
-			// console.log(input, input.value);
-			$last_fg_color_button.trigger({type: "pointerdown", ctrlKey: false, button: 0});
-			$last_fg_color_button.find("input").val(input.value).triggerHandler("change");
-		})
-		.show().css({width: 0, height: 0, padding: 0, border: 0, position: "absolute", pointerEvents: "none", overflow: "hidden"});
-	};
+	$(window).on("theme-change", build_palette);
 	
 	$c.rebuild_palette = build_palette;
 	
